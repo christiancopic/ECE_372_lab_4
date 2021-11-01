@@ -4,4 +4,15 @@ hi
 this is Megan
 
 
+We need files \n
+Main
+  - State Machine
+ 
+PWM
+ADC
+Button
+Timers
+Potentiometer?
+
+
 
