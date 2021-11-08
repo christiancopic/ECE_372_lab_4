@@ -1,6 +1,5 @@
-
-
 #include <avr/io.h>
+#include <math.h>
 
 //non-inverting
 void initPWMTimer3(){
@@ -27,7 +26,7 @@ void initPWMTimer4(){
     OCR4A = 255;
 }
 
-//The counters might be flipped. I'll check that in lab
+
 void changeDutyCycle(int tenBits){
     float v_k = (5/1024) * tenBits;
 
@@ -35,7 +34,7 @@ void changeDutyCycle(int tenBits){
         OCR3A = ((v_k-2.5)/2.5) * 1024;
         OCR4A = 0;
     }
-    else if (fabs(v_k - 2.5) < 0.0001){
+    else if (fabs(v_k - 2.5) < 0.0001){      
         OCR4A = 0;
         OCR3A = 0;
     }
@@ -44,3 +43,4 @@ void changeDutyCycle(int tenBits){
         OCR3A = 0;
     }
 }
+
