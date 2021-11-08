@@ -19,7 +19,7 @@ typedef enum stateEnum{
 
 // Initialize states.  Remember to use volatile 
 volatile stateType state = wait_press;
-unsigned int result = 0;
+int result = 0;
 volatile int segment_state = 1;  // not segment state counting 
 int main(){
   initTimer0();
@@ -44,6 +44,7 @@ int main(){
   
         segment_state = 1;
     }else{
+    sei();   //enable global interrupt
 
         //motor forward and backward 
 
@@ -69,22 +70,21 @@ int main(){
  
 }
 
-
  ISR(INT0_vect){  // External interrrupt 
     if(state == wait_press){
       state = bounce_low;
     }
     else if (state == wait_release){
       cli();   //disable interrupt
-     // changeDutyCycle(0b0100000000); //input 512 to Turn motor Off
+      changeDutyCycle(512); //input 512 to Turn motor Off
       if(segment_state == 1){  // check for the blinking state
             segment_state = 2;
           }
           else{
             segment_state = 1;
           }
-     // changeDutyCycle(result);   //Restart motor at current voltage
-      sei();   //enable interrupt
+      changeDutyCycle(result);   //Restart motor at current voltage
+      
       state = bounce_high;
     }
 
