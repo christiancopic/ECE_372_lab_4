@@ -29,12 +29,16 @@ int main(){
   initADC7();
   initSwitchPD0();  // initialized switch for external interrupt
   initSegment(); // initialized segment controller ports
+
+  Serial.begin(9600);
+  Serial.flush();
+
   sei();
 	while(1){
     //read potentiometer & change speed/direction accordingly
     result = ADCL;
     result += ((unsigned int)ADCH)<<8;
-    //changeDutyCycle(result);
+    changeDutyCycle(result);
     
     if(segment_state == 2){
             for(int i = 9; i >= 0; i--){

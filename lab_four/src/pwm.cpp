@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include <math.h>
+#include <Arduino.h>
 
 //non-inverting
 void initPWMTimer3(){
@@ -23,24 +24,30 @@ void initPWMTimer4(){
     TCCR4A |= (1<<COM4A1)|(1<<COM4A0)|(1<<WGM41)|(1<<WGM40);
     TCCR4B |= (1<<WGM42)|(1<<CS40);
     //duty cycle to 25%
-    OCR4A = 255;
+    OCR4A = 1023;
 }
 
 
 void changeDutyCycle(int tenBits){
-    float v_k = (5/1024) * tenBits;
+    float v_k = (5.0/1024.0) * tenBits;
+    
+    Serial.println(v_k, 2);
+    Serial.flush();
 
     if(v_k > 2.5){
-        OCR3A = ((v_k-2.5)/2.5) * 1024;
-        OCR4A = 0;
+        OCR4A = (1-(v_k-2.5)/2.5) * 1023;
+        OCR3A = 0;
+        Serial.println("1");
     }
     else if (fabs(v_k - 2.5) < 0.0001){      
-        OCR4A = 0;
         OCR3A = 0;
+        OCR4A = 0;
+        Serial.println("2");
     }
     else{
-        OCR4A = (1-(v_k/2.5)) * 1024;
-        OCR3A = 0;
+        OCR3A = (1-(v_k/2.5)) * 1023;
+        OCR4A = 1023;
+        Serial.println("3");
     }
 }
 
